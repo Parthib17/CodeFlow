@@ -1,0 +1,196 @@
+.complexity-panel {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-primary);
+    overflow: hidden;
+    min-height: 0;
+}
+
+.complexity-badge {
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: var(--gradient-brand-subtle);
+    background-image: var(--gradient-brand);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    border: 1px solid var(--glass-border);
+}
+
+.complexity-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+/* Complexity Cards */
+.complexity-card {
+    padding: var(--space-lg);
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-secondary);
+    text-align: center;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+.card-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-md);
+}
+
+.time-icon {
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-primary-light);
+}
+
+.space-icon {
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--accent-secondary);
+}
+
+.card-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card-value {
+    font-family: var(--font-mono);
+    font-size: 1.8rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin: var(--space-xs) 0;
+}
+
+.card-sublabel {
+    font-size: 0.7rem;
+    font-weight: 500;
+    margin-bottom: var(--space-md);
+}
+
+/* Complexity Meter */
+.complexity-meter {
+    display: flex;
+    gap: 3px;
+    justify-content: center;
+    margin-bottom: var(--space-xs);
+}
+
+.meter-bar {
+    width: 24px;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--bg-tertiary);
+    transition: all var(--transition-base);
+}
+
+.meter-bar.active {
+    animation: scaleIn 0.3s ease-out;
+}
+
+.rating-label {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Execution Stats */
+.exec-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-secondary);
+    overflow: hidden;
+}
+
+.stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-md);
+    background: var(--bg-secondary);
+}
+
+.stat-row:nth-child(odd) {
+    background: var(--bg-card);
+}
+
+.stat-label {
+    font-size: 0.65rem;
+    color: var(--text-tertiary);
+    font-weight: 500;
+}
+
+.stat-value {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Explanations */
+.complexity-explanations {
+    padding: var(--space-md);
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-secondary);
+}
+
+.explanations-title {
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-sm);
+}
+
+.explanation-item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: 2px 0;
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.explanation-dot {
+    color: var(--accent-primary-light);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.explanation-item code {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--accent-secondary);
+    background: rgba(6, 182, 212, 0.08);
+    padding: 0px 4px;
+    border-radius: 3px;
+}

@@ -1,0 +1,188 @@
+.execution-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-sm) var(--space-xl);
+    background: var(--bg-tertiary);
+    border-top: 1px solid var(--border-primary);
+    border-bottom: 1px solid var(--border-primary);
+    gap: var(--space-lg);
+    flex-shrink: 0;
+}
+
+.controls-left,
+.controls-center,
+.controls-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.controls-center {
+    gap: var(--space-lg);
+}
+
+.ctrl-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    padding: 6px 12px;
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-secondary);
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+}
+
+.ctrl-btn:hover:not(:disabled) {
+    background: var(--bg-card-hover);
+    color: var(--text-primary);
+    border-color: var(--glass-border-hover);
+    transform: translateY(-1px);
+}
+
+.ctrl-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.ctrl-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.ctrl-run {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: white;
+    font-weight: 600;
+    padding: 6px 16px;
+}
+
+.ctrl-run:hover:not(:disabled) {
+    background: var(--accent-primary-dark);
+    border-color: var(--accent-primary-dark);
+    color: white;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.ctrl-autoplay {
+    background: rgba(6, 182, 212, 0.1);
+    border-color: rgba(6, 182, 212, 0.3);
+    color: var(--accent-secondary);
+}
+
+.ctrl-autoplay:hover:not(:disabled) {
+    background: rgba(6, 182, 212, 0.2);
+    color: var(--accent-secondary);
+}
+
+.ctrl-reset {
+    color: var(--text-tertiary);
+}
+
+.ctrl-reset:hover:not(:disabled) {
+    color: var(--accent-danger);
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.ctrl-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border-primary);
+    margin: 0 var(--space-xs);
+}
+
+/* Step Counter */
+.step-counter {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+    font-family: var(--font-mono);
+}
+
+.step-current {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-primary-light);
+}
+
+.step-separator {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.step-total {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text-tertiary);
+}
+
+.step-label {
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    margin-left: 4px;
+    font-family: var(--font-sans);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Error Badge */
+.error-badge {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: var(--accent-danger);
+    font-size: 0.7rem;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Speed Control */
+.speed-control {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--text-tertiary);
+}
+
+.speed-buttons {
+    display: flex;
+    gap: 2px;
+    padding: 2px;
+    background: var(--bg-secondary);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-secondary);
+}
+
+.speed-btn {
+    padding: 3px 10px;
+    border: none;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--text-tertiary);
+    font-family: var(--font-sans);
+    font-size: 0.65rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.speed-btn:hover {
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.speed-btn.active {
+    background: var(--accent-primary);
+    color: white;
+}
