@@ -169,14 +169,17 @@ main();`,
         {
             name: 'Bubble Sort',
             icon: '🫧',
-            description: 'Sort an array',
+            description: 'Watch the array swap step by step',
             code: `public class Main {
     public static void main(String[] args) {
         int[] arr = {64, 34, 25, 12, 22, 11, 90};
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j < arr.length - i - 1; j++) {
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
-                    int t = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = t;
+                    int t = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = t;
                 }
             }
         }
@@ -185,16 +188,131 @@ main();`,
 }`,
         },
         {
-            name: 'Streams',
-            icon: '🌊',
-            description: 'Modern Java streams',
-            code: `import java.util.*;
-import java.util.stream.*;
-
-public class Main {
+            name: 'Selection Sort',
+            icon: '🎯',
+            description: 'Find the minimum and swap',
+            code: `public class Main {
     public static void main(String[] args) {
-        int sum = IntStream.rangeClosed(1, 10).filter(n -> n % 2 == 0).map(n -> n * n).sum();
-        System.out.println("Sum of squares of evens: " + sum);
+        int[] arr = {29, 10, 14, 37, 13};
+        int n = arr.length;
+        for (int i = 0; i < n - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < arr[minIdx]) {
+                    minIdx = j;
+                }
+            }
+            int t = arr[i];
+            arr[i] = arr[minIdx];
+            arr[minIdx] = t;
+        }
+        for (int x : arr) System.out.println(x);
+    }
+}`,
+        },
+        {
+            name: 'Linear Search',
+            icon: '🔍',
+            description: 'Step through each element',
+            code: `public class Main {
+    public static void main(String[] args) {
+        int[] arr = {7, 3, 11, 5, 19, 2, 8};
+        int target = 19;
+        int found = -1;
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] == target) {
+                found = i;
+                break;
+            }
+        }
+        if (found >= 0) {
+            System.out.println("Found " + target + " at index " + found);
+        } else {
+            System.out.println("Not found");
+        }
+    }
+}`,
+        },
+        {
+            name: 'Binary Search',
+            icon: '🪓',
+            description: 'Halve the array each step',
+            code: `public class Main {
+    public static void main(String[] args) {
+        int[] arr = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+        int target = 13;
+        int low = 0;
+        int high = arr.length - 1;
+        int found = -1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] == target) {
+                found = mid;
+                break;
+            } else if (arr[mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        System.out.println("Found at index: " + found);
+    }
+}`,
+        },
+        {
+            name: 'Reverse Array',
+            icon: '↩️',
+            description: 'Two-pointer reversal',
+            code: `public class Main {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7};
+        int left = 0;
+        int right = arr.length - 1;
+        while (left < right) {
+            int t = arr[left];
+            arr[left] = arr[right];
+            arr[right] = t;
+            left++;
+            right--;
+        }
+        for (int x : arr) System.out.println(x);
+    }
+}`,
+        },
+        {
+            name: 'Fibonacci',
+            icon: '🌀',
+            description: 'Iterative sequence',
+            code: `public class Main {
+    public static void main(String[] args) {
+        int n = 10;
+        int[] fib = new int[n];
+        fib[0] = 0;
+        fib[1] = 1;
+        for (int i = 2; i < n; i++) {
+            fib[i] = fib[i - 1] + fib[i - 2];
+        }
+        for (int x : fib) System.out.println(x);
+    }
+}`,
+        },
+        {
+            name: 'FizzBuzz',
+            icon: '🎯',
+            description: 'Classic FizzBuzz',
+            code: `public class Main {
+    public static void main(String[] args) {
+        for (int i = 1; i <= 15; i++) {
+            if (i % 15 == 0) {
+                System.out.println("FizzBuzz");
+            } else if (i % 3 == 0) {
+                System.out.println("Fizz");
+            } else if (i % 5 == 0) {
+                System.out.println("Buzz");
+            } else {
+                System.out.println(i);
+            }
+        }
     }
 }`,
         },
@@ -205,24 +323,153 @@ public class Main {
             icon: '👋',
             description: 'iostream basics',
             code: `#include <iostream>
+using namespace std;
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    cout << "Hello, World!" << endl;
+    int x = 10, y = 20;
+    cout << "Sum: " << (x + y) << endl;
     return 0;
 }`,
         },
         {
-            name: 'Vector Sort',
+            name: 'Bubble Sort',
             icon: '🫧',
-            description: 'std::sort',
+            description: 'Watch the vector swap step by step',
             code: `#include <iostream>
 #include <vector>
-#include <algorithm>
 using namespace std;
 int main() {
     vector<int> v = {5, 3, 8, 1, 9, 2};
-    sort(v.begin(), v.end());
+    int n = v.size();
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (v[j] > v[j + 1]) {
+                int t = v[j];
+                v[j] = v[j + 1];
+                v[j + 1] = t;
+            }
+        }
+    }
     for (int x : v) cout << x << " ";
     cout << endl;
+    return 0;
+}`,
+        },
+        {
+            name: 'Selection Sort',
+            icon: '🎯',
+            description: 'Find the minimum and swap',
+            code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {29, 10, 14, 37, 13};
+    int n = v.size();
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (v[j] < v[minIdx]) {
+                minIdx = j;
+            }
+        }
+        int t = v[i];
+        v[i] = v[minIdx];
+        v[minIdx] = t;
+    }
+    for (int x : v) cout << x << " ";
+    cout << endl;
+    return 0;
+}`,
+        },
+        {
+            name: 'Binary Search',
+            icon: '🪓',
+            description: 'Halve the array each step',
+            code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+    int target = 13;
+    int low = 0;
+    int high = v.size() - 1;
+    int found = -1;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (v[mid] == target) {
+            found = mid;
+            break;
+        } else if (v[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    cout << "Found at index: " << found << endl;
+    return 0;
+}`,
+        },
+        {
+            name: 'Reverse Vector',
+            icon: '↩️',
+            description: 'Two-pointer reversal',
+            code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    vector<int> v = {1, 2, 3, 4, 5, 6, 7};
+    int left = 0;
+    int right = v.size() - 1;
+    while (left < right) {
+        int t = v[left];
+        v[left] = v[right];
+        v[right] = t;
+        left++;
+        right--;
+    }
+    for (int x : v) cout << x << " ";
+    cout << endl;
+    return 0;
+}`,
+        },
+        {
+            name: 'Fibonacci',
+            icon: '🌀',
+            description: 'Iterative sequence',
+            code: `#include <iostream>
+#include <vector>
+using namespace std;
+int main() {
+    int n = 10;
+    vector<int> fib(n, 0);
+    fib[0] = 0;
+    fib[1] = 1;
+    for (int i = 2; i < n; i++) {
+        fib[i] = fib[i - 1] + fib[i - 2];
+    }
+    for (int x : fib) cout << x << " ";
+    cout << endl;
+    return 0;
+}`,
+        },
+        {
+            name: 'FizzBuzz',
+            icon: '🎯',
+            description: 'Classic FizzBuzz',
+            code: `#include <iostream>
+using namespace std;
+int main() {
+    for (int i = 1; i <= 15; i++) {
+        if (i % 15 == 0) {
+            cout << "FizzBuzz" << endl;
+        } else if (i % 3 == 0) {
+            cout << "Fizz" << endl;
+        } else if (i % 5 == 0) {
+            cout << "Buzz" << endl;
+        } else {
+            cout << i << endl;
+        }
+    }
     return 0;
 }`,
         },
@@ -231,10 +478,169 @@ int main() {
         {
             name: 'Hello World',
             icon: '👋',
-            description: 'printf',
+            description: 'printf basics',
             code: `#include <stdio.h>
 int main() {
     printf("Hello, World!\\n");
+    int x = 10, y = 20;
+    printf("Sum: %d\\n", x + y);
+    return 0;
+}`,
+        },
+        {
+            name: 'Bubble Sort',
+            icon: '🫧',
+            description: 'Watch the array swap step by step',
+            code: `#include <stdio.h>
+int main() {
+    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = 7;
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (arr[j] > arr[j + 1]) {
+                int t = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = t;
+            }
+        }
+    }
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
+    return 0;
+}`,
+        },
+        {
+            name: 'Selection Sort',
+            icon: '🎯',
+            description: 'Find the minimum and swap',
+            code: `#include <stdio.h>
+int main() {
+    int arr[] = {29, 10, 14, 37, 13};
+    int n = 5;
+    for (int i = 0; i < n - 1; i++) {
+        int minIdx = i;
+        for (int j = i + 1; j < n; j++) {
+            if (arr[j] < arr[minIdx]) {
+                minIdx = j;
+            }
+        }
+        int t = arr[i];
+        arr[i] = arr[minIdx];
+        arr[minIdx] = t;
+    }
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
+    return 0;
+}`,
+        },
+        {
+            name: 'Linear Search',
+            icon: '🔍',
+            description: 'Step through each element',
+            code: `#include <stdio.h>
+int main() {
+    int arr[] = {7, 3, 11, 5, 19, 2, 8};
+    int n = 7;
+    int target = 19;
+    int found = -1;
+    for (int i = 0; i < n; i++) {
+        if (arr[i] == target) {
+            found = i;
+            break;
+        }
+    }
+    if (found >= 0) {
+        printf("Found %d at index %d\\n", target, found);
+    } else {
+        printf("Not found\\n");
+    }
+    return 0;
+}`,
+        },
+        {
+            name: 'Binary Search',
+            icon: '🪓',
+            description: 'Halve the array each step',
+            code: `#include <stdio.h>
+int main() {
+    int arr[] = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+    int n = 10;
+    int target = 13;
+    int low = 0;
+    int high = n - 1;
+    int found = -1;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (arr[mid] == target) {
+            found = mid;
+            break;
+        } else if (arr[mid] < target) {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    printf("Found at index: %d\\n", found);
+    return 0;
+}`,
+        },
+        {
+            name: 'Reverse Array',
+            icon: '↩️',
+            description: 'Two-pointer reversal',
+            code: `#include <stdio.h>
+int main() {
+    int arr[] = {1, 2, 3, 4, 5, 6, 7};
+    int n = 7;
+    int left = 0;
+    int right = n - 1;
+    while (left < right) {
+        int t = arr[left];
+        arr[left] = arr[right];
+        arr[right] = t;
+        left++;
+        right--;
+    }
+    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
+    printf("\\n");
+    return 0;
+}`,
+        },
+        {
+            name: 'Fibonacci',
+            icon: '🌀',
+            description: 'Iterative sequence',
+            code: `#include <stdio.h>
+int main() {
+    int n = 10;
+    int fib[10];
+    fib[0] = 0;
+    fib[1] = 1;
+    for (int i = 2; i < n; i++) {
+        fib[i] = fib[i - 1] + fib[i - 2];
+    }
+    for (int i = 0; i < n; i++) printf("%d ", fib[i]);
+    printf("\\n");
+    return 0;
+}`,
+        },
+        {
+            name: 'FizzBuzz',
+            icon: '🎯',
+            description: 'Classic FizzBuzz',
+            code: `#include <stdio.h>
+int main() {
+    for (int i = 1; i <= 15; i++) {
+        if (i % 15 == 0) {
+            printf("FizzBuzz\\n");
+        } else if (i % 3 == 0) {
+            printf("Fizz\\n");
+        } else if (i % 5 == 0) {
+            printf("Buzz\\n");
+        } else {
+            printf("%d\\n", i);
+        }
+    }
     return 0;
 }`,
         },

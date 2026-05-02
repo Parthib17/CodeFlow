@@ -1,20 +1,28 @@
 import React, { createContext, useContext, useReducer, useCallback, useRef } from 'react';
 import { executePython } from '../engine/pyodideRunner';
 import { executeJavaScript } from '../engine/jsExecutor';
+import { executeJava } from '../engine/javaExecutor';
+import { executeC } from '../engine/cExecutor';
+import { executeCpp } from '../engine/cppExecutor';
 import { executeViaPiston, PISTON_LANGUAGES } from '../engine/pistonRunner';
 import { analyzeComplexity } from '../engine/complexityAnalyzer';
 
 const ExecutionContext = createContext(null);
 
 // Languages that support per-step visualization (real interpreters with stepping).
-export const VISUALIZED_LANGUAGES = new Set(['python', 'javascript']);
+export const VISUALIZED_LANGUAGES = new Set(['python', 'javascript', 'java', 'c', 'cpp']);
 
 // All supported languages (visualized + piston-runner languages).
 export const SUPPORTED_LANGUAGES = {
-    python: { label: 'Python', icon: '🐍', mode: 'visualize' },
+    python:     { label: 'Python',     icon: '🐍', mode: 'visualize' },
     javascript: { label: 'JavaScript', icon: '🟨', mode: 'visualize' },
+    java:       { label: 'Java',       icon: '☕', mode: 'visualize' },
+    c:          { label: 'C',          icon: '🅒',  mode: 'visualize' },
+    cpp:        { label: 'C++',        icon: '➕', mode: 'visualize' },
     ...Object.fromEntries(
-        Object.entries(PISTON_LANGUAGES).map(([k, v]) => [k, { label: v.label, icon: v.icon, mode: 'run' }])
+        Object.entries(PISTON_LANGUAGES)
+            .filter(([k]) => !['java', 'c', 'cpp'].includes(k))
+            .map(([k, v]) => [k, { label: v.label, icon: v.icon, mode: 'run' }])
     ),
 };
 
@@ -57,26 +65,49 @@ console.log("Sorted:", sorted);
     java: `public class Main {
     public static void main(String[] args) {
         int[] arr = {64, 34, 25, 12, 22, 11, 90};
-        for (int i = 0; i < arr.length - 1; i++) {
-            for (int j = 0; j < arr.length - i - 1; j++) {
+        int n = arr.length;
+
+        // Bubble Sort — watch the array change step by step
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
                 if (arr[j] > arr[j + 1]) {
-                    int t = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = t;
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
                 }
             }
         }
-        for (int x : arr) System.out.println(x);
+
+        System.out.println("Sorted array:");
+        for (int i = 0; i < n; i++) {
+            System.out.println(arr[i]);
+        }
     }
 }
 `,
     cpp: `#include <iostream>
 #include <vector>
-#include <algorithm>
 using namespace std;
 
 int main() {
-    vector<int> v = {5, 3, 8, 1, 9, 2};
-    sort(v.begin(), v.end());
-    for (int x : v) cout << x << " ";
+    vector<int> v = {64, 34, 25, 12, 22, 11, 90};
+    int n = v.size();
+
+    // Bubble Sort — watch vector change step by step
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (v[j] > v[j + 1]) {
+                int temp = v[j];
+                v[j] = v[j + 1];
+                v[j + 1] = temp;
+            }
+        }
+    }
+
+    cout << "Sorted: ";
+    for (int x : v) {
+        cout << x << " ";
+    }
     cout << endl;
     return 0;
 }
@@ -84,15 +115,24 @@ int main() {
     c: `#include <stdio.h>
 
 int main() {
-    int arr[] = {5, 3, 8, 1, 9, 2};
-    int n = 6;
-    for (int i = 0; i < n - 1; i++)
-        for (int j = 0; j < n - i - 1; j++)
+    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = 7;
+
+    // Bubble Sort — watch the array change step by step
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
             if (arr[j] > arr[j + 1]) {
-                int t = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = t;
+                int temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
             }
-    for (int i = 0; i < n; i++) printf("%d ", arr[i]);
-    printf("\\n");
+        }
+    }
+
+    printf("Sorted array:\\n");
+    for (int i = 0; i < n; i++) {
+        printf("%d\\n", arr[i]);
+    }
     return 0;
 }
 `,
@@ -229,6 +269,15 @@ async function runEngine(language, code, onProgress) {
     if (language === 'javascript') {
         return executeJavaScript(code);
     }
+    if (language === 'java') {
+        return executeJava(code);
+    }
+    if (language === 'c') {
+        return executeC(code);
+    }
+    if (language === 'cpp') {
+        return executeCpp(code);
+    }
     if (PISTON_LANGUAGES[language]) {
         onProgress?.('Compiling & running on remote sandbox…');
         return executeViaPiston(language, code);
@@ -262,7 +311,7 @@ export function ExecutionProvider({ children }) {
             const result = await runEngine(state.language, state.code, onProgress);
             if (runIdRef.current !== myRunId) return; // superseded by another run
 
-            // Static complexity is Python-flavored; only show it for languages where it makes sense.
+            // Run static complexity analysis for all visualized languages.
             if (VISUALIZED_LANGUAGES.has(state.language)) {
                 try { result.complexity = analyzeComplexity(state.code, result); }
                 catch { result.complexity = null; }
