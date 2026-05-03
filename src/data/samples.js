@@ -649,11 +649,173 @@ int main() {
         {
             name: 'Hello World',
             icon: '👋',
-            description: 'fmt.Println',
+            description: 'fmt.Println basics',
             code: `package main
+
 import "fmt"
+
 func main() {
     fmt.Println("Hello, World!")
+    x, y := 10, 20
+    fmt.Println("Sum:", x+y)
+}`,
+        },
+        {
+            name: 'Bubble Sort',
+            icon: '🫧',
+            description: 'Watch the slice swap step by step',
+            code: `package main
+
+import "fmt"
+
+func main() {
+    arr := []int{64, 34, 25, 12, 22, 11, 90}
+    n := len(arr)
+    for i := 0; i < n-1; i++ {
+        for j := 0; j < n-i-1; j++ {
+            if arr[j] > arr[j+1] {
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+            }
+        }
+    }
+    fmt.Println("Sorted:", arr)
+}`,
+        },
+        {
+            name: 'Selection Sort',
+            icon: '🎯',
+            description: 'Find the minimum and swap',
+            code: `package main
+
+import "fmt"
+
+func main() {
+    arr := []int{29, 10, 14, 37, 13}
+    n := len(arr)
+    for i := 0; i < n-1; i++ {
+        minIdx := i
+        for j := i + 1; j < n; j++ {
+            if arr[j] < arr[minIdx] {
+                minIdx = j
+            }
+        }
+        arr[i], arr[minIdx] = arr[minIdx], arr[i]
+    }
+    fmt.Println("Sorted:", arr)
+}`,
+        },
+        {
+            name: 'Linear Search',
+            icon: '🔍',
+            description: 'Step through each element',
+            code: `package main
+
+import "fmt"
+
+func main() {
+    arr := []int{7, 3, 11, 5, 19, 2, 8}
+    target := 19
+    found := -1
+    for i := 0; i < len(arr); i++ {
+        if arr[i] == target {
+            found = i
+            break
+        }
+    }
+    if found >= 0 {
+        fmt.Println("Found", target, "at index", found)
+    } else {
+        fmt.Println("Not found")
+    }
+}`,
+        },
+        {
+            name: 'Binary Search',
+            icon: '🪓',
+            description: 'Halve the array each step',
+            code: `package main
+
+import "fmt"
+
+func main() {
+    arr := []int{1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
+    target := 13
+    low := 0
+    high := len(arr) - 1
+    found := -1
+    for low <= high {
+        mid := (low + high) / 2
+        if arr[mid] == target {
+            found = mid
+            break
+        } else if arr[mid] < target {
+            low = mid + 1
+        } else {
+            high = mid - 1
+        }
+    }
+    fmt.Println("Found at index:", found)
+}`,
+        },
+        {
+            name: 'Reverse Slice',
+            icon: '↩️',
+            description: 'Two-pointer reversal',
+            code: `package main
+
+import "fmt"
+
+func main() {
+    arr := []int{1, 2, 3, 4, 5, 6, 7}
+    left := 0
+    right := len(arr) - 1
+    for left < right {
+        arr[left], arr[right] = arr[right], arr[left]
+        left++
+        right--
+    }
+    fmt.Println(arr)
+}`,
+        },
+        {
+            name: 'Fibonacci',
+            icon: '🌀',
+            description: 'Iterative sequence',
+            code: `package main
+
+import "fmt"
+
+func main() {
+    n := 10
+    fib := make([]int, n)
+    fib[0] = 0
+    fib[1] = 1
+    for i := 2; i < n; i++ {
+        fib[i] = fib[i-1] + fib[i-2]
+    }
+    fmt.Println(fib)
+}`,
+        },
+        {
+            name: 'FizzBuzz',
+            icon: '🎯',
+            description: 'Classic FizzBuzz',
+            code: `package main
+
+import "fmt"
+
+func main() {
+    for i := 1; i <= 15; i++ {
+        if i%15 == 0 {
+            fmt.Println("FizzBuzz")
+        } else if i%3 == 0 {
+            fmt.Println("Fizz")
+        } else if i%5 == 0 {
+            fmt.Println("Buzz")
+        } else {
+            fmt.Println(i)
+        }
+    }
 }`,
         },
     ],
@@ -661,19 +823,148 @@ func main() {
         {
             name: 'Hello World',
             icon: '👋',
-            description: 'println!',
+            description: 'println! basics',
             code: `fn main() {
     println!("Hello, World!");
+    let x = 10;
+    let y = 20;
+    println!("Sum: {}", x + y);
 }`,
         },
         {
-            name: 'Vec & Iterator',
-            icon: '🦀',
-            description: 'Functional Rust',
+            name: 'Bubble Sort',
+            icon: '🫧',
+            description: 'Watch the vec swap step by step',
             code: `fn main() {
-    let nums: Vec<i32> = (1..=10).collect();
-    let sum: i32 = nums.iter().filter(|n| *n % 2 == 0).map(|n| n * n).sum();
-    println!("{}", sum);
+    let mut arr = vec![64, 34, 25, 12, 22, 11, 90];
+    let n = arr.len();
+    for i in 0..n - 1 {
+        for j in 0..n - i - 1 {
+            if arr[j] > arr[j + 1] {
+                let temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+    println!("Sorted: {:?}", arr);
+}`,
+        },
+        {
+            name: 'Selection Sort',
+            icon: '🎯',
+            description: 'Find the minimum and swap',
+            code: `fn main() {
+    let mut arr = vec![29, 10, 14, 37, 13];
+    let n = arr.len();
+    for i in 0..n - 1 {
+        let mut min_idx = i;
+        for j in i + 1..n {
+            if arr[j] < arr[min_idx] {
+                min_idx = j;
+            }
+        }
+        let temp = arr[i];
+        arr[i] = arr[min_idx];
+        arr[min_idx] = temp;
+    }
+    println!("Sorted: {:?}", arr);
+}`,
+        },
+        {
+            name: 'Linear Search',
+            icon: '🔍',
+            description: 'Step through each element',
+            code: `fn main() {
+    let arr = vec![7, 3, 11, 5, 19, 2, 8];
+    let target = 19;
+    let mut found: i32 = -1;
+    for i in 0..arr.len() {
+        if arr[i] == target {
+            found = i as i32;
+            break;
+        }
+    }
+    if found >= 0 {
+        println!("Found {} at index {}", target, found);
+    } else {
+        println!("Not found");
+    }
+}`,
+        },
+        {
+            name: 'Binary Search',
+            icon: '🪓',
+            description: 'Halve the array each step',
+            code: `fn main() {
+    let arr = vec![1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
+    let target = 13;
+    let mut low: i32 = 0;
+    let mut high: i32 = arr.len() as i32 - 1;
+    let mut found: i32 = -1;
+    while low <= high {
+        let mid = (low + high) / 2;
+        if arr[mid as usize] == target {
+            found = mid;
+            break;
+        } else if arr[mid as usize] < target {
+            low = mid + 1;
+        } else {
+            high = mid - 1;
+        }
+    }
+    println!("Found at index: {}", found);
+}`,
+        },
+        {
+            name: 'Reverse Vec',
+            icon: '↩️',
+            description: 'Two-pointer reversal',
+            code: `fn main() {
+    let mut arr = vec![1, 2, 3, 4, 5, 6, 7];
+    let mut left = 0;
+    let mut right = arr.len() - 1;
+    while left < right {
+        let temp = arr[left];
+        arr[left] = arr[right];
+        arr[right] = temp;
+        left += 1;
+        right -= 1;
+    }
+    println!("{:?}", arr);
+}`,
+        },
+        {
+            name: 'Fibonacci',
+            icon: '🌀',
+            description: 'Iterative sequence',
+            code: `fn main() {
+    let n = 10;
+    let mut fib = vec![0; n];
+    fib[0] = 0;
+    fib[1] = 1;
+    for i in 2..n {
+        fib[i] = fib[i - 1] + fib[i - 2];
+    }
+    println!("{:?}", fib);
+}`,
+        },
+        {
+            name: 'FizzBuzz',
+            icon: '🎯',
+            description: 'Classic FizzBuzz',
+            code: `fn main() {
+    for i in 1..=15 {
+        if i % 15 == 0 {
+            println!("FizzBuzz");
+        } else if i % 3 == 0 {
+            println!("Fizz");
+        } else if i % 5 == 0 {
+            println!("Buzz");
+        } else {
+            println!("{}", i);
+        }
+    }
 }`,
         },
     ],
@@ -691,11 +982,186 @@ console.log("Sorted:", sorted);`,
         {
             name: 'Hello World',
             icon: '👋',
-            description: 'Console.WriteLine',
+            description: 'Console.WriteLine basics',
             code: `using System;
+
 class Program {
     static void Main() {
         Console.WriteLine("Hello, World!");
+        int x = 10, y = 20;
+        Console.WriteLine($"Sum: {x + y}");
+    }
+}`,
+        },
+        {
+            name: 'Bubble Sort',
+            icon: '🫧',
+            description: 'Watch the array swap step by step',
+            code: `using System;
+
+class Program {
+    static void Main() {
+        int[] arr = {64, 34, 25, 12, 22, 11, 90};
+        int n = arr.Length;
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+        foreach (var x in arr) {
+            Console.WriteLine(x);
+        }
+    }
+}`,
+        },
+        {
+            name: 'Selection Sort',
+            icon: '🎯',
+            description: 'Find the minimum and swap',
+            code: `using System;
+
+class Program {
+    static void Main() {
+        int[] arr = {29, 10, 14, 37, 13};
+        int n = arr.Length;
+        for (int i = 0; i < n - 1; i++) {
+            int minIdx = i;
+            for (int j = i + 1; j < n; j++) {
+                if (arr[j] < arr[minIdx]) {
+                    minIdx = j;
+                }
+            }
+            int temp = arr[i];
+            arr[i] = arr[minIdx];
+            arr[minIdx] = temp;
+        }
+        foreach (var x in arr) {
+            Console.WriteLine(x);
+        }
+    }
+}`,
+        },
+        {
+            name: 'Linear Search',
+            icon: '🔍',
+            description: 'Step through each element',
+            code: `using System;
+
+class Program {
+    static void Main() {
+        int[] arr = {7, 3, 11, 5, 19, 2, 8};
+        int target = 19;
+        int found = -1;
+        for (int i = 0; i < arr.Length; i++) {
+            if (arr[i] == target) {
+                found = i;
+                break;
+            }
+        }
+        if (found >= 0) {
+            Console.WriteLine($"Found {target} at index {found}");
+        } else {
+            Console.WriteLine("Not found");
+        }
+    }
+}`,
+        },
+        {
+            name: 'Binary Search',
+            icon: '🪓',
+            description: 'Halve the array each step',
+            code: `using System;
+
+class Program {
+    static void Main() {
+        int[] arr = {1, 3, 5, 7, 9, 11, 13, 15, 17, 19};
+        int target = 13;
+        int low = 0;
+        int high = arr.Length - 1;
+        int found = -1;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (arr[mid] == target) {
+                found = mid;
+                break;
+            } else if (arr[mid] < target) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        Console.WriteLine($"Found at index: {found}");
+    }
+}`,
+        },
+        {
+            name: 'Reverse Array',
+            icon: '↩️',
+            description: 'Two-pointer reversal',
+            code: `using System;
+
+class Program {
+    static void Main() {
+        int[] arr = {1, 2, 3, 4, 5, 6, 7};
+        int left = 0;
+        int right = arr.Length - 1;
+        while (left < right) {
+            int temp = arr[left];
+            arr[left] = arr[right];
+            arr[right] = temp;
+            left++;
+            right--;
+        }
+        foreach (var x in arr) {
+            Console.WriteLine(x);
+        }
+    }
+}`,
+        },
+        {
+            name: 'Fibonacci',
+            icon: '🌀',
+            description: 'Iterative sequence',
+            code: `using System;
+
+class Program {
+    static void Main() {
+        int n = 10;
+        int[] fib = new int[n];
+        fib[0] = 0;
+        fib[1] = 1;
+        for (int i = 2; i < n; i++) {
+            fib[i] = fib[i - 1] + fib[i - 2];
+        }
+        foreach (var x in fib) {
+            Console.WriteLine(x);
+        }
+    }
+}`,
+        },
+        {
+            name: 'FizzBuzz',
+            icon: '🎯',
+            description: 'Classic FizzBuzz',
+            code: `using System;
+
+class Program {
+    static void Main() {
+        for (int i = 1; i <= 15; i++) {
+            if (i % 15 == 0) {
+                Console.WriteLine("FizzBuzz");
+            } else if (i % 3 == 0) {
+                Console.WriteLine("Fizz");
+            } else if (i % 5 == 0) {
+                Console.WriteLine("Buzz");
+            } else {
+                Console.WriteLine(i);
+            }
+        }
     }
 }`,
         },

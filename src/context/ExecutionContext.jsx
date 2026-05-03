@@ -4,13 +4,16 @@ import { executeJavaScript } from '../engine/jsExecutor';
 import { executeJava } from '../engine/javaExecutor';
 import { executeC } from '../engine/cExecutor';
 import { executeCpp } from '../engine/cppExecutor';
+import { executeGo } from '../engine/goExecutor';
+import { executeRust } from '../engine/rustExecutor';
+import { executeCSharp } from '../engine/csharpExecutor';
 import { executeViaPiston, PISTON_LANGUAGES } from '../engine/pistonRunner';
 import { analyzeComplexity } from '../engine/complexityAnalyzer';
 
 const ExecutionContext = createContext(null);
 
 // Languages that support per-step visualization (real interpreters with stepping).
-export const VISUALIZED_LANGUAGES = new Set(['python', 'javascript', 'java', 'c', 'cpp']);
+export const VISUALIZED_LANGUAGES = new Set(['python', 'javascript', 'java', 'c', 'cpp', 'go', 'rust', 'csharp']);
 
 // All supported languages (visualized + piston-runner languages).
 export const SUPPORTED_LANGUAGES = {
@@ -19,48 +22,45 @@ export const SUPPORTED_LANGUAGES = {
     java:       { label: 'Java',       icon: '☕', mode: 'visualize' },
     c:          { label: 'C',          icon: '🅒',  mode: 'visualize' },
     cpp:        { label: 'C++',        icon: '➕', mode: 'visualize' },
+    go:         { label: 'Go',         icon: '🐹', mode: 'visualize' },
+    rust:       { label: 'Rust',       icon: '🦀', mode: 'visualize' },
+    csharp:     { label: 'C#',         icon: '#️⃣', mode: 'visualize' },
     ...Object.fromEntries(
         Object.entries(PISTON_LANGUAGES)
-            .filter(([k]) => !['java', 'c', 'cpp'].includes(k))
+            .filter(([k]) => !['java', 'c', 'cpp', 'go', 'rust', 'csharp'].includes(k))
             .map(([k, v]) => [k, { label: v.label, icon: v.icon, mode: 'run' }])
     ),
 };
 
 const DEFAULT_SAMPLES = {
     python: `# Welcome to CodeFlow!
-# Real CPython runs here — every Python feature works.
+# Bubble Sort — watch the array swap step by step.
 
-def fib(n):
-    a, b = 0, 1
-    seq = []
-    for _ in range(n):
-        seq.append(a)
-        a, b = b, a + b
-    return seq
+arr = [64, 34, 25, 12, 22, 11, 90]
+n = len(arr)
 
-result = fib(10)
-print("Fibonacci:", result)
-print("Sum:", sum(result))
+for i in range(n - 1):
+    for j in range(n - i - 1):
+        if arr[j] > arr[j + 1]:
+            arr[j], arr[j + 1] = arr[j + 1], arr[j]
+
+print("Sorted:", arr)
 `,
     javascript: `// Welcome to CodeFlow!
-// Modern JavaScript (ES2023+) — arrow functions, classes, async, all of it.
+// Bubble Sort — watch the array swap step by step.
 
-const arr = [5, 3, 8, 1, 9, 2];
+const arr = [64, 34, 25, 12, 22, 11, 90];
+const n = arr.length;
 
-function bubbleSort(a) {
-    const xs = [...a];
-    for (let i = 0; i < xs.length - 1; i++) {
-        for (let j = 0; j < xs.length - i - 1; j++) {
-            if (xs[j] > xs[j + 1]) {
-                [xs[j], xs[j + 1]] = [xs[j + 1], xs[j]];
-            }
+for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < n - i - 1; j++) {
+        if (arr[j] > arr[j + 1]) {
+            [arr[j], arr[j + 1]] = [arr[j + 1], arr[j]];
         }
     }
-    return xs;
 }
 
-const sorted = bubbleSort(arr);
-console.log("Sorted:", sorted);
+console.log("Sorted:", arr);
 `,
     java: `public class Main {
     public static void main(String[] args) {
@@ -141,21 +141,37 @@ int main() {
 import "fmt"
 
 func main() {
-    arr := []int{5, 3, 8, 1, 9, 2}
-    for i := 0; i < len(arr)-1; i++ {
-        for j := 0; j < len(arr)-i-1; j++ {
+    arr := []int{64, 34, 25, 12, 22, 11, 90}
+    n := len(arr)
+
+    // Bubble Sort — watch the slice swap step by step
+    for i := 0; i < n-1; i++ {
+        for j := 0; j < n-i-1; j++ {
             if arr[j] > arr[j+1] {
                 arr[j], arr[j+1] = arr[j+1], arr[j]
             }
         }
     }
-    fmt.Println(arr)
+
+    fmt.Println("Sorted:", arr)
 }
 `,
     rust: `fn main() {
-    let mut arr = vec![5, 3, 8, 1, 9, 2];
-    arr.sort();
-    println!("{:?}", arr);
+    let mut arr = vec![64, 34, 25, 12, 22, 11, 90];
+    let n = arr.len();
+
+    // Bubble Sort — watch the vec swap step by step
+    for i in 0..n - 1 {
+        for j in 0..n - i - 1 {
+            if arr[j] > arr[j + 1] {
+                let temp = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j + 1] = temp;
+            }
+        }
+    }
+
+    println!("Sorted: {:?}", arr);
 }
 `,
     typescript: `const arr: number[] = [5, 3, 8, 1, 9, 2];
@@ -163,11 +179,27 @@ const sorted = [...arr].sort((a, b) => a - b);
 console.log("Sorted:", sorted);
 `,
     csharp: `using System;
+
 class Program {
     static void Main() {
-        int[] arr = {5, 3, 8, 1, 9, 2};
-        Array.Sort(arr);
-        Console.WriteLine(string.Join(" ", arr));
+        int[] arr = {64, 34, 25, 12, 22, 11, 90};
+        int n = arr.Length;
+
+        // Bubble Sort — watch the array swap step by step
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+                }
+            }
+        }
+
+        Console.WriteLine("Sorted:");
+        foreach (var x in arr) {
+            Console.WriteLine(x);
+        }
     }
 }
 `,
@@ -215,13 +247,14 @@ function reducer(state, action) {
         case 'SET_CODE':
             return { ...state, code: action.payload, steps: [], currentStep: -1, isRunning: false, isPaused: false, isComplete: false, error: null, output: '', complexity: null };
         case 'SET_LANGUAGE': {
-            const sample = DEFAULT_SAMPLES[action.payload] || '';
-            // Only swap source if user is on a default sample (avoid clobbering edits).
-            const currentIsDefault = Object.values(DEFAULT_SAMPLES).includes(state.code);
+            // Always load the language's default sample so the editor immediately
+            // shows valid code for the new language. (Previous behavior preserved
+            // edits, but the user wanted automatic swap on language change.)
+            const sample = DEFAULT_SAMPLES[action.payload] ?? state.code;
             return {
                 ...state,
                 language: action.payload,
-                code: currentIsDefault ? sample : state.code,
+                code: sample,
                 steps: [],
                 currentStep: -1,
                 isRunning: false,
@@ -277,6 +310,15 @@ async function runEngine(language, code, onProgress) {
     }
     if (language === 'cpp') {
         return executeCpp(code);
+    }
+    if (language === 'go') {
+        return executeGo(code);
+    }
+    if (language === 'rust') {
+        return executeRust(code);
+    }
+    if (language === 'csharp') {
+        return executeCSharp(code);
     }
     if (PISTON_LANGUAGES[language]) {
         onProgress?.('Compiling & running on remote sandbox…');

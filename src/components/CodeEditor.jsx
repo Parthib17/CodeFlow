@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { useExecution } from '../context/ExecutionContext';
 import { sampleSnippets } from '../data/samples';
@@ -13,6 +13,23 @@ const MONACO_LANG = {
 
 export default function CodeEditor() {
     const { code, setCode, language, steps, currentStep, supportedLanguages, loadingMessage } = useExecution();
+    const [samplesOpen, setSamplesOpen] = useState(false);
+    const sampleDropdownRef = useRef(null);
+
+    // Click outside to close the samples dropdown
+    useEffect(() => {
+        if (!samplesOpen) return;
+        const onClick = (e) => {
+            if (sampleDropdownRef.current && !sampleDropdownRef.current.contains(e.target)) {
+                setSamplesOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', onClick);
+        return () => document.removeEventListener('mousedown', onClick);
+    }, [samplesOpen]);
+
+    // Close the dropdown if the user switches language while it's open
+    useEffect(() => { setSamplesOpen(false); }, [language]);
 
     const currentLine = useMemo(() => {
         if (currentStep >= 0 && currentStep < steps.length) {
@@ -69,6 +86,7 @@ export default function CodeEditor() {
 
     const loadSample = (sample) => {
         setCode(sample.code);
+        setSamplesOpen(false);
     };
 
     return (
@@ -85,30 +103,44 @@ export default function CodeEditor() {
                     </span>
                 </div>
                 <div className="panel-actions">
-                    <div className="sample-dropdown" id="sample-dropdown">
-                        <button className="sample-btn" id="sample-btn">
+                    <div
+                        className={`sample-dropdown${samplesOpen ? ' is-open' : ''}`}
+                        id="sample-dropdown"
+                        ref={sampleDropdownRef}
+                    >
+                        <button
+                            className="sample-btn"
+                            id="sample-btn"
+                            onClick={() => setSamplesOpen((o) => !o)}
+                            aria-expanded={samplesOpen}
+                        >
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                                 <polyline points="14 2 14 8 20 8"></polyline>
                             </svg>
                             Samples
                         </button>
-                        <div className="sample-list" id="sample-list">
-                            {(sampleSnippets[language] || []).map((s, i) => (
-                                <button
-                                    key={i}
-                                    className="sample-item"
-                                    onClick={() => loadSample(s)}
-                                    id={`sample-${i}`}
-                                >
-                                    <span className="sample-icon">{s.icon}</span>
-                                    <div className="sample-info">
-                                        <span className="sample-name">{s.name}</span>
-                                        <span className="sample-desc">{s.description}</span>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
+                        {samplesOpen && (
+                            <div className="sample-list" id="sample-list">
+                                {(sampleSnippets[language] || []).map((s, i) => (
+                                    <button
+                                        key={i}
+                                        className="sample-item"
+                                        onClick={() => loadSample(s)}
+                                        id={`sample-${i}`}
+                                    >
+                                        <span className="sample-icon">{s.icon}</span>
+                                        <div className="sample-info">
+                                            <span className="sample-name">{s.name}</span>
+                                            <span className="sample-desc">{s.description}</span>
+                                        </div>
+                                    </button>
+                                ))}
+                                {(sampleSnippets[language] || []).length === 0 && (
+                                    <div className="sample-empty">No samples for this language yet.</div>
+                                )}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
