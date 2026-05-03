@@ -12,9 +12,13 @@ const MONACO_LANG = {
 };
 
 export default function CodeEditor() {
-    const { code, setCode, language, steps, currentStep, supportedLanguages, loadingMessage } = useExecution();
+    const {
+        code, setCode, loadSample, language, steps, currentStep,
+        supportedLanguages, loadingMessage, sampleName,
+    } = useExecution();
     const [samplesOpen, setSamplesOpen] = useState(false);
     const sampleDropdownRef = useRef(null);
+    const isCustom = sampleName === 'Custom';
 
     // Click outside to close the samples dropdown
     useEffect(() => {
@@ -84,8 +88,8 @@ export default function CodeEditor() {
         setCode(value);
     };
 
-    const loadSample = (sample) => {
-        setCode(sample.code);
+    const handleLoadSample = (sample) => {
+        loadSample(sample);
         setSamplesOpen(false);
     };
 
@@ -100,6 +104,13 @@ export default function CodeEditor() {
                     <span>Code Editor</span>
                     <span className="language-badge">
                         {supportedLanguages?.[language]?.icon} {supportedLanguages?.[language]?.label}
+                    </span>
+                    <span
+                        className={`sample-name-badge${isCustom ? ' is-custom' : ''}`}
+                        title={isCustom ? 'You have edited this code' : `Loaded sample: ${sampleName}`}
+                    >
+                        <span className="sample-name-dot" />
+                        {sampleName}
                     </span>
                 </div>
                 <div className="panel-actions">
@@ -126,7 +137,7 @@ export default function CodeEditor() {
                                     <button
                                         key={i}
                                         className="sample-item"
-                                        onClick={() => loadSample(s)}
+                                        onClick={() => handleLoadSample(s)}
                                         id={`sample-${i}`}
                                     >
                                         <span className="sample-icon">{s.icon}</span>

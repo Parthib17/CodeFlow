@@ -227,9 +227,17 @@ echo "\${sorted[@]}"
 `,
 };
 
+// Label shown in the editor header. Until the user edits the source we mirror
+// the loaded sample's name; once they diverge we switch to "Custom".
+const DEFAULT_SAMPLE_NAME = 'Bubble Sort';
+const CUSTOM_SAMPLE_NAME = 'Custom';
+
 const initialState = {
     code: DEFAULT_SAMPLES.python,
+    loadedCode: DEFAULT_SAMPLES.python,
+    loadedSampleName: DEFAULT_SAMPLE_NAME,
     language: 'python',
+    sampleName: DEFAULT_SAMPLE_NAME,
     steps: [],
     currentStep: -1,
     isRunning: false,
@@ -244,8 +252,34 @@ const initialState = {
 
 function reducer(state, action) {
     switch (action.type) {
-        case 'SET_CODE':
-            return { ...state, code: action.payload, steps: [], currentStep: -1, isRunning: false, isPaused: false, isComplete: false, error: null, output: '', complexity: null };
+        case 'SET_CODE': {
+            // Editor onChange fires both for user typing and for programmatic
+            // updates (after LOAD_SAMPLE / SET_LANGUAGE). When the new text
+            // exactly matches the most recently loaded source, restore that
+            // sample's name; otherwise the user has diverged → "Custom". This
+            // also flips back from Custom to the original name if the user
+            // undoes their edits.
+            const matchesLoaded = action.payload === state.loadedCode;
+            return {
+                ...state,
+                code: action.payload,
+                sampleName: matchesLoaded ? state.loadedSampleName : CUSTOM_SAMPLE_NAME,
+                steps: [], currentStep: -1, isRunning: false, isPaused: false,
+                isComplete: false, error: null, output: '', complexity: null,
+            };
+        }
+        case 'LOAD_SAMPLE': {
+            const { name, code } = action.payload;
+            return {
+                ...state,
+                code,
+                loadedCode: code,
+                loadedSampleName: name,
+                sampleName: name,
+                steps: [], currentStep: -1, isRunning: false, isPaused: false,
+                isComplete: false, error: null, output: '', complexity: null,
+            };
+        }
         case 'SET_LANGUAGE': {
             // Always load the language's default sample so the editor immediately
             // shows valid code for the new language. (Previous behavior preserved
@@ -255,6 +289,9 @@ function reducer(state, action) {
                 ...state,
                 language: action.payload,
                 code: sample,
+                loadedCode: sample,
+                loadedSampleName: DEFAULT_SAMPLE_NAME,
+                sampleName: DEFAULT_SAMPLE_NAME,
                 steps: [],
                 currentStep: -1,
                 isRunning: false,
@@ -457,6 +494,11 @@ export function ExecutionProvider({ children }) {
         dispatch({ type: 'SET_CODE', payload: code });
     }, [clearAutoPlay]);
 
+    const loadSample = useCallback((sample) => {
+        clearAutoPlay();
+        dispatch({ type: 'LOAD_SAMPLE', payload: { name: sample.name, code: sample.code } });
+    }, [clearAutoPlay]);
+
     const setLanguage = useCallback((lang) => {
         clearAutoPlay();
         dispatch({ type: 'SET_LANGUAGE', payload: lang });
@@ -476,6 +518,7 @@ export function ExecutionProvider({ children }) {
         pause,
         reset,
         setCode,
+        loadSample,
         setLanguage,
         setSpeed,
         supportedLanguages: SUPPORTED_LANGUAGES,
