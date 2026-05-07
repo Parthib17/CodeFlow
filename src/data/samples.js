@@ -968,16 +968,6 @@ func main() {
 }`,
         },
     ],
-    typescript: [
-        {
-            name: 'Typed Sort',
-            icon: '🔷',
-            description: 'TS with types',
-            code: `const arr: number[] = [5, 3, 8, 1, 9, 2];
-const sorted = [...arr].sort((a, b) => a - b);
-console.log("Sorted:", sorted);`,
-        },
-    ],
     csharp: [
         {
             name: 'Hello World',
@@ -1164,58 +1154,6 @@ class Program {
         }
     }
 }`,
-        },
-    ],
-    ruby: [
-        {
-            name: 'Hello World',
-            icon: '👋',
-            description: 'puts',
-            code: `puts "Hello, World!"
-arr = [5, 3, 8, 1, 9, 2]
-puts arr.sort.inspect`,
-        },
-    ],
-    php: [
-        {
-            name: 'Hello World',
-            icon: '👋',
-            description: 'echo',
-            code: `<?php
-echo "Hello, World!\\n";
-$arr = [5, 3, 8, 1, 9, 2];
-sort($arr);
-print_r($arr);`,
-        },
-    ],
-    kotlin: [
-        {
-            name: 'Hello World',
-            icon: '👋',
-            description: 'println',
-            code: `fun main() {
-    println("Hello, World!")
-}`,
-        },
-    ],
-    swift: [
-        {
-            name: 'Hello World',
-            icon: '👋',
-            description: 'print',
-            code: `print("Hello, World!")`,
-        },
-    ],
-    bash: [
-        {
-            name: 'Hello World',
-            icon: '👋',
-            description: 'echo',
-            code: `#!/bin/bash
-echo "Hello, World!"
-for i in {1..5}; do
-    echo "Number: $i"
-done`,
         },
     ],
 };

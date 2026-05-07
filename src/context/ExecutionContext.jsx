@@ -174,10 +174,6 @@ func main() {
     println!("Sorted: {:?}", arr);
 }
 `,
-    typescript: `const arr: number[] = [5, 3, 8, 1, 9, 2];
-const sorted = [...arr].sort((a, b) => a - b);
-console.log("Sorted:", sorted);
-`,
     csharp: `using System;
 
 class Program {
@@ -202,28 +198,6 @@ class Program {
         }
     }
 }
-`,
-    ruby: `arr = [5, 3, 8, 1, 9, 2]
-puts arr.sort.inspect
-`,
-    php: `<?php
-$arr = [5, 3, 8, 1, 9, 2];
-sort($arr);
-print_r($arr);
-`,
-    kotlin: `fun main() {
-    val arr = intArrayOf(5, 3, 8, 1, 9, 2)
-    arr.sort()
-    println(arr.joinToString(" "))
-}
-`,
-    swift: `let arr = [5, 3, 8, 1, 9, 2]
-print(arr.sorted())
-`,
-    bash: `#!/bin/bash
-arr=(5 3 8 1 9 2)
-IFS=$'\\n' sorted=($(sort -n <<<"\${arr[*]}"))
-echo "\${sorted[@]}"
 `,
 };
 

@@ -54,12 +54,6 @@ export const PISTON_LANGUAGES = {
     go:         { label: 'Go',         icon: '🐹' },
     rust:       { label: 'Rust',       icon: '🦀' },
     csharp:     { label: 'C#',         icon: '#️⃣' },
-    kotlin:     { label: 'Kotlin',     icon: '🟪' },
-    swift:      { label: 'Swift',      icon: '🦅' },
-    typescript: { label: 'TypeScript', icon: '🔷' },
-    ruby:       { label: 'Ruby',       icon: '💎' },
-    php:        { label: 'PHP',        icon: '🐘' },
-    bash:       { label: 'Bash',       icon: '💲' },
 };
 
 /* ── Output cleanup ─────────────────────────────────────────────────
