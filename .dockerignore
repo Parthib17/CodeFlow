@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-ssr
+.git
+.gitignore
+.claude
+.env
+.env.*
+*.log
+README.md
